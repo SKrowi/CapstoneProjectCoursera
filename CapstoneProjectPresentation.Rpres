@@ -1,0 +1,77 @@
+Capstone Project Presentation
+========================================================
+author: Stefanie K.
+date: 21/06/2021 
+autosize: true
+
+Context
+========================================================
+
+This is the final task of the 11-month track "on coding in "Data Science Specialization" offered on coursera by the Johns Hopkins University.
+In the so called Captone Project an app was to be designed which would predict the upcoming word when somebody would type some input. This task was designed in conjunction with SwiftKey.
+
+The key requirements for the app can be summarized as:
+
+- Use Shiny as host and tool for building the app
+- Take some written input
+- Predict and return the word which is most likely to be written next
+
+Input Data for Prediction Model
+========================================================
+
+The data was provided under the followeing link: https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip
+
+
+It entails data in English, German, Finnish and Russian, however, only the English input was used. The corpora are collected from publicly available sources by a web crawler. Each entry is tagged with it's date of publication. The entries were retrieved from blogs, twitter, and the news. Further, the entries are anonymised.
+
+Random sample of the data:
+
+- ngrams = trigrams
+- freq = frequency of a trigram to appear (across the whole input data set)
+- prop = probability of this trigram to appear (across the whole input data set)
+
+```{r, message = FALSE, echo = FALSE}
+#setwd("C:\\S\\OneDrive - SCPARTNERS\\Desktop\\Coursera\\CourseraCapstone")
+df_trigrams <- readRDS("df_trigrams.rds")
+#setwd("C:/S/OneDrive - SCPARTNERS/Desktop/Coursera/CourseraCapstone/CapstoneFinalProject")
+
+library(tidyverse)
+
+df_trigrams %>%
+    sample_n(5) 
+```
+
+The Data Cleaning Process
+========================================================
+
+The data has been cleaned in a previous step / a previous assessment on coursera. For this assignment, the cleaned dataset with trigrams has simply been been loaded.
+The cleaning process entailed some of these steps:
+
+
+- Transformation of strings to all lower letters
+- Removal of punctuation
+- Removal of numbers
+
+
+Typically in text analyses, also stop words would have been removed and words would have been stemmed. In this case I did not conduct such a step as e.g. stop words like "the" and "a" are valid words which might be rightly be proposed to follow the words entered.
+
+
+About the App
+========================================================
+Since I am using the free version of shiny's host solution, I had to decrease the input data and flexibility as both taken together would require a larger instance size (the free version is limited to 1 GB).
+
+How the app works:
+- Select the number of words predicted you would like to return by moving the slider to a position between 1 and 10
+- Enter words
+- Press the submit button. Due to the instance size and inefficiencies in the code, it might take a little bit until you will see a result on the right
+- If the code cannot find a match, it returns an apology
+
+How the algorithm works:
+- It takes the last two words entered,
+- Looks for trigrams which start with the last two words entered,
+- Returns the top results - as many as you will have selected, unless there are fewer,
+- If no match exists, an explanatory text will be returned, else, only the words which were predicted to come next (look up words subtracted) will be returned
+
+Access to Code and App:
+- Here you can find the code: https://github.com/SKrowi/CapstoneProjectCourser
+- Here you will find the app: https://skrowi.shinyapps.io/CourseraCapstoneProject/ 
